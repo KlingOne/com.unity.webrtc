@@ -3,6 +3,7 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 using System.Diagnostics;
+using UnityEngine;
 using Object = UnityEngine.Object;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -95,6 +96,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         public IEnumerator SendThrowsExceptionAfterClose()
         {
             var test = new MonoBehaviourTest<SignalingPeers>();
@@ -117,6 +119,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+		 [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         public IEnumerator SendAndReceiveMessage()
         {
             var test = new MonoBehaviourTest<SignalingPeers>();

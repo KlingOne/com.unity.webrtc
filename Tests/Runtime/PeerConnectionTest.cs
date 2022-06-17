@@ -276,7 +276,7 @@ namespace Unity.WebRTC.RuntimeTest
         [UnityTest]
         [Timeout(1000)]
         [Category("PeerConnection")]
-        [UnityPlatform(exclude = new[] { RuntimePlatform.OSXPlayer })]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.OSXPlayer, RuntimePlatform.WebGLPlayer })]
         public IEnumerator CurrentDirection()
         {
             var config = GetDefaultConfiguration();
@@ -337,6 +337,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator TransceiverReturnsSender()
         {
             RTCConfiguration config = default;
@@ -379,6 +380,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(1000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public IEnumerator CreateOffer()
         {
@@ -396,6 +398,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(1000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public IEnumerator CreateAnswerFailed()
         {
@@ -416,6 +419,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(1000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public IEnumerator CreateAnswer()
         {
@@ -446,6 +450,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(1000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public IEnumerator SetLocalDescription()
         {
@@ -470,6 +475,11 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [Test]
+        // TODO: Remove [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
+        // Possible fixes:
+        // - For webgl, add an async method for NativeMethods.SetDescription which returns RTCErrorType
+        // - Wait for Unity 2021 to support ES6+ syntax, which allows to wait in javascript to return the RTCErrorType
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public void SetLocalDescriptionThrowException()
         {
@@ -486,7 +496,7 @@ namespace Unity.WebRTC.RuntimeTest
         [UnityTest]
         [Timeout(1000)]
         [Category("PeerConnection")]
-        [UnityPlatform(exclude = new[] { RuntimePlatform.OSXPlayer })]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.OSXPlayer, RuntimePlatform.WebGLPlayer })]
         public IEnumerator SetRemoteDescription()
         {
             var config = GetDefaultConfiguration();
@@ -522,6 +532,11 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [Test]
+        // TODO: Remove [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
+        // Possible fixes:
+        // - For webgl, add an async method for NativeMethods.SetDescription which returns RTCErrorType
+        // - Wait for Unity 2021 to support ES6+ syntax, which allows to wait in javascript to return the RTCErrorType
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public void SetRemoteDescriptionThrowException()
         {
@@ -538,6 +553,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(1000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public IEnumerator SetLocalDescriptionFailed()
         {
@@ -573,6 +589,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(1000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         [Category("PeerConnection")]
         public IEnumerator SetRemoteDescriptionFailed()
         {
@@ -613,6 +630,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator IceConnectionStateChange()
         {
             RTCConfiguration config = default;
@@ -664,6 +682,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator AddIceCandidate()
         {
             RTCConfiguration config = default;
@@ -747,6 +766,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator MediaStreamTrackThrowExceptionAfterPeerDisposed()
         {
             RTCConfiguration config = default;
@@ -779,6 +799,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator PeerConnectionStateChange()
         {
             RTCConfiguration config = default;
@@ -851,6 +872,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator GetStatsReturnsReport()
         {
             if (SystemInfo.processorType == "Apple M1")
@@ -906,6 +928,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator RestartIceInvokeOnNegotiationNeeded()
         {
             RTCConfiguration config = default;
@@ -949,6 +972,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer })]
         public IEnumerator RemoteOnRemoveTrack()
         {
             RTCConfiguration config = default;

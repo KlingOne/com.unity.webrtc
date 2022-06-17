@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Unity.WebRTC
@@ -30,6 +32,9 @@ namespace Unity.WebRTC
             }
             if (self != IntPtr.Zero && !WebRTC.Context.IsNull)
             {
+#if UNITY_WEBGL
+                NativeMethods.DeleteSender(self);
+#endif
                 WebRTC.Table.Remove(self);
             }
             base.Dispose();
@@ -42,12 +47,17 @@ namespace Unity.WebRTC
         /// <returns></returns>
         public static RTCRtpCapabilities GetCapabilities(TrackKind kind)
         {
+
+#if !UNITY_WEBGL
             WebRTC.Context.GetSenderCapabilities(kind, out IntPtr ptr);
             RTCRtpCapabilitiesInternal capabilitiesInternal =
                 Marshal.PtrToStructure<RTCRtpCapabilitiesInternal>(ptr);
             RTCRtpCapabilities capabilities = new RTCRtpCapabilities(capabilitiesInternal);
             Marshal.FreeHGlobal(ptr);
             return capabilities;
+#else
+            return WebRTC.Context.GetSenderCapabilities(kind);
+#endif
         }
 
         /// <summary>
@@ -79,11 +89,17 @@ namespace Unity.WebRTC
         /// <returns></returns>
         public RTCRtpSendParameters GetParameters()
         {
+
+#if !UNITY_WEBGL
             NativeMethods.SenderGetParameters(GetSelfOrThrow(), out var ptr);
             RTCRtpSendParametersInternal parametersInternal = Marshal.PtrToStructure<RTCRtpSendParametersInternal>(ptr);
             RTCRtpSendParameters parameters = new RTCRtpSendParameters(ref parametersInternal);
             Marshal.FreeHGlobal(ptr);
             return parameters;
+#else
+            string json = NativeMethods.SenderGetParameters(self);
+            return JsonConvert.DeserializeObject<RTCRtpSendParameters>(json);
+#endif
         }
 
         /// <summary>
@@ -93,6 +109,7 @@ namespace Unity.WebRTC
         /// <returns></returns>
         public RTCError SetParameters(RTCRtpSendParameters parameters)
         {
+#if !UNITY_WEBGL
             if (Track is VideoStreamTrack videoTrack)
             {
                 foreach (var encoding in parameters.encodings)
@@ -118,6 +135,13 @@ namespace Unity.WebRTC
             RTCErrorType type = NativeMethods.SenderSetParameters(GetSelfOrThrow(), ptr);
             Marshal.FreeCoTaskMem(ptr);
             return new RTCError {errorType = type};
+#else
+            string json = JsonConvert.SerializeObject(parameters, Formatting.None, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+
+            //TODO Get correct RTCErrorType from jslib.
+            NativeMethods.SenderSetParameters(self, json);
+            return RTCErrorType.None;
+#endif
         }
 
         /// <summary>

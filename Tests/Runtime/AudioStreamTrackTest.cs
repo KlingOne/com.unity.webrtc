@@ -25,6 +25,7 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         [Timeout(5000)]
         public IEnumerator AddAndRemoveAudioTrack()
         {
@@ -43,6 +44,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [Ignore("AudioManager is disabled when batch mode on CI")]
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         [Timeout(5000)]
         public IEnumerator AddMultiAudioTrack()
         {
@@ -144,7 +146,7 @@ namespace Unity.WebRTC.RuntimeTest
             UnityEngine.Object.DestroyImmediate(source.clip);
             UnityEngine.Object.DestroyImmediate(obj);
         }
-
+#if !UNITY_WEBGL
         [Test]
         public void AudioStreamTrackPlayAudio()
         {
@@ -159,6 +161,7 @@ namespace Unity.WebRTC.RuntimeTest
             UnityEngine.Object.DestroyImmediate(obj);
         }
 
+
         [Test]
         public void AudioStreamRenderer()
         {
@@ -168,5 +171,6 @@ namespace Unity.WebRTC.RuntimeTest
             renderer.Dispose();
             UnityEngine.Object.DestroyImmediate(obj);
         }
+#endif
     }
 }

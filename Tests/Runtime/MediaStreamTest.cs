@@ -66,7 +66,7 @@ namespace Unity.WebRTC.RuntimeTest
         [UnityTest]
         [Timeout(5000)]
         [Category("MediaStream")]
-        [UnityPlatform(exclude = new[] { RuntimePlatform.LinuxPlayer, RuntimePlatform.Android })]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.LinuxPlayer, RuntimePlatform.Android, RuntimePlatform.WebGLPlayer })]
         public IEnumerator VideoStreamAddTrackAndRemoveTrack()
         {
             var width = 256;
@@ -134,6 +134,7 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         [Timeout(5000)]
         public IEnumerator CameraCaptureStream()
         {
@@ -156,6 +157,7 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         [Timeout(5000)]
         public IEnumerator CaptureStream()
         {
@@ -183,6 +185,7 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         [Timeout(5000)]
         public IEnumerator SenderGetStats()
         {
@@ -231,6 +234,7 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         [Timeout(5000)]
         public IEnumerator ReceiverGetStats()
         {
@@ -274,6 +278,7 @@ namespace Unity.WebRTC.RuntimeTest
         }
 
         [UnityTest]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         [Timeout(5000)]
         public IEnumerator SetParametersReturnNoError()
         {
@@ -369,7 +374,7 @@ namespace Unity.WebRTC.RuntimeTest
         // todo::(kazuki) Test execution timed out on linux standalone
         [UnityTest]
         [Timeout(5000)]
-        [UnityPlatform(exclude = new[] { RuntimePlatform.LinuxPlayer })]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.LinuxPlayer, RuntimePlatform.WebGLPlayer})]
         public IEnumerator OnAddTrackDelegatesWithEvent()
         {
             var camObj = new GameObject("Camera");
@@ -429,6 +434,7 @@ namespace Unity.WebRTC.RuntimeTest
 
         [UnityTest]
         [Timeout(5000)]
+        [UnityPlatform(exclude = new[] { RuntimePlatform.WebGLPlayer})]
         public IEnumerator ReceiverGetStreams()
         {
             var obj = new GameObject("audio");

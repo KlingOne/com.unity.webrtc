@@ -46,6 +46,7 @@ namespace Unity.WebRTC.Samples
         [SerializeField] private Button buttonBandwidth;
         [SerializeField] private Button buttonPerfectNegotiation;
         [SerializeField] private Button buttonLatency;
+        [SerializeField] private Button buttonWebGL;
 
         void Start()
         {
@@ -73,6 +74,7 @@ namespace Unity.WebRTC.Samples
             // This sample uses Compute Shader, so almost Android devices don't work correctly.
             if (!SystemInfo.supportsComputeShaders)
                 buttonLatency.interactable = false;
+            buttonWebGL.onClick.AddListener(OnPressedWebGLButton);
         }
 
         private void OnChangeHWCodec(bool enable)
@@ -147,6 +149,10 @@ namespace Unity.WebRTC.Samples
         private void OnPressedLatencyButton()
         {
             SceneManager.LoadScene("E2ELatency", LoadSceneMode.Single);
+        }
+        private void OnPressedWebGLButton()
+        {
+            SceneManager.LoadScene("WebGL", LoadSceneMode.Single);
         }
     }
 }
