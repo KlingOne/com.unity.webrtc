@@ -359,7 +359,7 @@ namespace Unity.WebRTC
     /// </summary>
     public static class WebRTC
     {
-if UNITY_IOS || UNITY_WEBGL
+#if UNITY_IOS || UNITY_WEBGL
         internal const string Lib = "__Internal";
 #else
         internal const string Lib = "webrtc";

@@ -42,18 +42,15 @@ namespace Unity.WebRTC
             tex.Create();
             return tex;
         }
-
+#if UNITY_WEBGL
         internal VideoStreamTrack(Texture source, RenderTexture dest, int width, int height)
-#if !UNITY_WEBGL
-            : this(dest.GetNativeTexturePtr(), width, height, source.graphicsFormat)
-#else
             : this(source.GetNativeTexturePtr(), dest.GetNativeTexturePtr(), width, height)
-#endif
         {
             m_needFlip = true;
             m_sourceTexture = source;
             m_destTexture = dest;
         }
+#endif
 
         /// <summary>
         /// note:
@@ -98,50 +95,20 @@ namespace Unity.WebRTC
             }
         }
 
-        public Texture InitializeReceiver(int width, int height)
-        {
-#if !UNITY_WEBGL
-            if (IsDecoderInitialized)
-                throw new InvalidOperationException("Already initialized receiver, use Texture property");
-#endif
-
-            m_needFlip = true;
-            var format = WebRTC.GetSupportedGraphicsFormat(SystemInfo.graphicsDeviceType);
-            m_sourceTexture = new Texture2D(width, height, format, TextureCreationFlags.None);
-            //m_destTexture = CreateRenderTexture(m_sourceTexture.width, m_sourceTexture.height);
-#if !UNITY_WEBGL
-            //m_sourceTexture = new Texture2D(width, height, format, TextureCreationFlags.None);
-            m_destTexture = CreateRenderTexture(m_sourceTexture.width, m_sourceTexture.height);
-            m_renderer = new UnityVideoRenderer(WebRTC.Context.CreateVideoRenderer(), this);
-#else
-            //m_destTexture = CreateRenderTexture(width, height, renderTextureFormat);
-            var texPtr = NativeMethods.CreateNativeTexture();
-            var tex = Texture2D.CreateExternalTexture(width, height, TextureFormat.RGBA32, false, false, texPtr);
-            tex.UpdateExternalTexture(texPtr);
-            m_destTexture = tex;
-            IsRemote = true;
-#endif
-
-
-            return m_destTexture;
-        }
-
-        /// <
-        /// <summary>
-        ///
-        /// </summary>: 2020-03-09] Flip vertical /// <summary>
-        ///
-        /// </summary>
         public event OnVideoReceived OnVideoReceived;
 
         internal void UpdateReceiveTexture()
         {
 #if !UNITY_WEBGL
-            m_renderer?.U#else
+            m_renderer?.Update();
+#else
             NativeMethods.UpdateRendererTexture(self, m_destTexture.GetNativeTexturePtr(), m_needFlip);
-#endif void UpdateSendTexture()
+#endif
+        }
+
+        internal void UpdateSendTexture()
         {
-#if !UNITY_WEBGL#if !UNITY_WEBGL
+#if !UNITY_WEBGL
             if (m_source == null)
                 return;
             // [Note-kazuki: 2020-03-09] Flip vertically RenderTexture
@@ -159,10 +126,11 @@ namespace Unity.WebRTC
             }
 
             WebRTC.Context.Encode(GetSelfOrThrow());
-
 #else
             NativeMethods.RenderLocalVideotrack(GetSelfOrThrow(), m_needFlip);
-#endif        }ly Rend#elser, dstTexturePtr        /// <summary>
+#endif
+        }
+
         /// Creates a new VideoStream object.
         /// The track is created with a `source`.
         /// </summary>
@@ -176,8 +144,7 @@ namespace Unity.WebRTC
                 needFlip)
         {
         }
-#if !UNITY
-_WEBGL
+#if !UNITY_WEBGL
         internal VideoStreamTrack(Texture texture, RenderTexture dest, int width, int height, bool needFlip)
             : this(dest.GetNativeTexturePtr(), width, height, texture.graphicsFormat, needFlip)
         {
@@ -225,8 +192,8 @@ _WEBGL
             m_source = source;
         }
 
-    
-    #else
+
+#else
         /// <summary>
         /// Creates a new VideoStream object.
         /// The track is created with a source texture `ptr`.
@@ -244,7 +211,8 @@ _WEBGL
             if (!s_tracks.TryAdd(self, new WeakReference<VideoStreamTrack>(this)))
                 throw new InvalidOperationException();
         }
-#endif/// <summary>
+#endif
+        /// <summary>
         /// Video Receiver
         /// </summary>
         /// <param name="ptr"></param>
@@ -254,17 +222,19 @@ _WEBGL
                 throw new InvalidOperationException();
 
             m_renderer = new UnityVideoRenderer(this, true);
-        }, width, height))
-        {
-        {
-
-            m_needFlip = needFlip;
-            m_source = source;
         }
-#endif
-        /// <summary>
-        /// Creates from MediaStreamTrack object
-        /// </summary>Lre);                if (m_source != null)
+
+        public override void Dispose()
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (self != IntPtr.Zero && !WebRTC.Context.IsNull)
+            {
+#if !UNITY_WEBGL
+                if (m_source != null)
                 {
                     WebRTC.Context.FinalizeEncoder(self);
                     if (RenderTexture.active == m_destTexture)
@@ -277,36 +247,11 @@ _WEBGL
 
                 m_renderer?.Dispose();
                 m_source?.Dispose();
-
-                s_tracks.TryRemove(self, out var value);
-
-m_sourceTexture = 					null;
-            m_renderer = new UnityVideoRenderer(this, true);
-        }
-
-        public override void Dispose()
-        {
-            if (this.disposed)
-            {
-                return;
-}				            }             WebRTC.DestroyOnMainThread(m_destTexture);
-                }
-
-                _source?.Dispose();
-                }
-
-                _source?.Dispose();
-                m_renderer?.Dispose();
-                m_source?.Dispose();
-                    // Unity API must be called from main thread.
-                    WebRTC.DestroyOnMainThread(m_destTexture);
-                }
-
-                _source?.Dispose();
+#else
+                if (RenderTexture.active == m_destTexture)
+                    RenderTexture.active = null;
+                UnityEngine.Object.DestroyImmediate(m_destTexture);
 #endif
-
-
-
                 s_tracks.TryRemove(self, out var value);
             }
             base.Dispose();

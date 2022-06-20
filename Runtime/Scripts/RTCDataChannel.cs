@@ -244,12 +244,12 @@ namespace Unity.WebRTC
             : base(ptr)
         {
             WebRTC.Table.Add(self, this);
-            NativeMethods.DataChannelRegisterOnMessage(self, DataChannelNativeOnMessage);
+            WebRTC.Context.DataChannelRegisterOnMessage(self, DataChannelNativeOnMessage);
 #if UNITY_WEBGL
             NativeMethods.DataChannelRegisterOnTextMessage(self, DataChannelNativeOnTextMessage);
 #endif
-            NativeMethods.DataChannelRegisterOnOpen(self, DataChannelNativeOnOpen);
-            NativeMethods.DataChannelRegisterOnClose(self, DataChannelNativeOnClose);
+            WebRTC.Context.DataChannelRegisterOnOpen(self, DataChannelNativeOnOpen);
+            WebRTC.Context.DataChannelRegisterOnClose(self, DataChannelNativeOnClose);
         }
 
         ~RTCDataChannel()
