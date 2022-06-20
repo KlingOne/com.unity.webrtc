@@ -1190,7 +1190,6 @@ namespace Unity.WebRTC
         public static extern int TransceiverGetCurrentDirection(IntPtr transceiver);
 #endif
         [DllImport(WebRTC.Lib)]
-        [return: MarshalAs(UnmanagedType.U1)]
         public static extern RTCErrorType TransceiverStop(IntPtr transceiver);
 #if !UNITY_WEBGL
         [DllImport(WebRTC.Lib)]
